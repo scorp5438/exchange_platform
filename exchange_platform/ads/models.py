@@ -89,7 +89,7 @@ class ExchangeProposal(models.Model):
         blank=False,
         null=False,
         db_index=True,
-        verbose_name='Описание товара'
+        verbose_name='Комментарий'
     )
     status = models.CharField(
         max_length=50,
