@@ -1,0 +1,37 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+    Сайт рецептов
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="ads-list">
+        <h1>Список объявлений</h1>
+        {% if object_list %}
+            <ol>
+                {% for ads in object_list %}
+                    <div class="ads-item">
+                        <li>
+
+                            <img src="{{ ads.get_image_url }}" alt="{{ ads.title }}">
+                            <ul>
+                                <li><strong>Заголовок:</strong> {{ ads.title }}</li>
+                                <li><strong>Описание:</strong> {{ ads.description }}</li>
+                                <li><strong>Автор объявления:</strong> {{ ads.user.username }}</li>
+                                <li><strong>Категория:</strong> {{ ads.category }}</li>
+                                <li><strong>Состояние товара:</strong> {{ ads.condition }}</li>
+                                <li><strong>Дата добавления:</strong> {{ ads.created_at }}</li>
+                            </ul>
+                        </li>
+                    </div>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>Еще нет ни одного объявления...</p>
+        {% endif %}
+
+
+    </div>
+{% endblock %}

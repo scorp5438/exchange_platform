@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CASCADE
 from imagekit.models import ProcessedImageField
-from pilkit.processors import ResizeToFill
+from pilkit.processors import ResizeToFill, ResizeToFit
 
 
 class Ad(models.Model):
@@ -32,16 +32,18 @@ class Ad(models.Model):
     )
     image_url = ProcessedImageField(
         upload_to='images/',
-        processors=[ResizeToFill(450, 340)],
+        processors=[ResizeToFit(450, 340)],
         format='JPEG',
         options={'quality': 85},
         blank=True,
         null=True,
         verbose_name='Изображение товара'
     )
-    category = models.OneToOneField(
+    category = models.ForeignKey(
         to='Category',
-        on_delete=CASCADE
+        on_delete=models.CASCADE,
+        verbose_name='Категория',
+        related_name='ads'
     )
     condition = models.CharField(
         max_length=50,
@@ -62,7 +64,8 @@ class Ad(models.Model):
 
     def get_image_url(self):
         """Возвращает относительный URL изображения или None если изображения нет"""
-        return f'/media/{self.image_url.name}' if self.image_url else None
+        # return f'/media/{self.image_url.name}' if self.image_url else None
+        return self.image_url.url if self.image_url else None
 
     def __str__(self):
         return self.title
@@ -93,8 +96,7 @@ class ExchangeProposal(models.Model):
     )
     status = models.CharField(
         max_length=50,
-        blank=False,
-        null=False,
+        default='ожидает',
         choices=STATUSES,
         db_index=True,
         verbose_name='Статус'
@@ -104,8 +106,12 @@ class ExchangeProposal(models.Model):
         verbose_name='дата создания'
     )
 
+    class Meta:
+        verbose_name = 'Предложение обмена'
+        verbose_name_plural = 'Предложение обмена'
+
     def __str__(self):
-        return self.status
+        return f'Предложение #{self.pk} ({self.status})'
 
 
 class Category(models.Model):

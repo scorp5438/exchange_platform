@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <style>
+            body {
+                background-color: #00ffaa59;
+            }
+            body a {
+                font-size: 20px;
+                text-decoration: none;
+            }
+            body a:hover {
+                color: red; /* Цвет ссылки при наведении */
+            }
+
+            .auth {
+                font-size: 20px;
+            }
+
+            .user_content {
+                text-align: right;
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+                margin-right: 20px;
+            }
+        </style>
+    <title>
+        {% block title %}
+            Base Title
+        {% endblock%}
+    </title>
+</head>
+<body>
+    {% block body %}
+        <h1>Base body</h1>
+    {% endblock%}
+</body>
+</html>
