@@ -26,10 +26,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Ad)
 class AdAdmin(admin.ModelAdmin):
-    list_display = 'pk', 'title', 'get_short_description', 'category', 'condition', 'created_at'
-    list_display_links = 'pk', 'title', 'category',
+    list_display = 'pk', 'title', 'get_short_description', 'user', 'category', 'condition', 'created_at'
+    list_display_links = 'pk', 'title', 'user', 'category',
     ordering = 'pk', 'title', 'category', 'condition', 'created_at'
-    search_fields = 'title', 'category', 'condition', 'description'
+    search_fields = 'title', 'category', 'user', 'condition', 'description'
 
     def get_short_description(self, obj: Ad):
         return f'{obj.description[:20]}...'

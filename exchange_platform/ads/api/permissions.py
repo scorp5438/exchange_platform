@@ -1,8 +1,10 @@
-from django.template.context_processors import request
 from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
+
+    message = "Вы можете редактировать только свои объявления"
+
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return obj.user == request.user
+        return obj.user == request.user or request.user.is_staff

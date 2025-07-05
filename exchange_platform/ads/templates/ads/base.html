@@ -13,11 +13,24 @@
     </title>
 </head>
 <body>
-    <div>
+    <div class="user_content">
+        {% if not user.is_authenticated %}
+            <p class="auth">Вы не авторизованы</p>
+        {% else %}
+            <p class="auth" >{{ user }}</p>
+        {% endif %}
+        {% if user.is_staff %}
+           <p class="auth"> <a href="{% url 'admin:index' %}">Админ-панель</a></p>
+        {% endif %}
 
+        {% if not user.is_authenticated %}
+           <p class="auth"> <a href="{% url 'accounts:login' %}">Вход</a></p>
+           <p class="auth"> <a href="{% url 'accounts:register' %}">Регистрация</a></p>
+        {% else %}
+           <p class="auth"> <a href="{% url 'accounts:logout' %}">Выход</a></p>
+        {% endif %}
     </div>
     {% block body %}
-    {% csrf_token %}
         <h1>Base body</h1>
     {% endblock%}
 </body>

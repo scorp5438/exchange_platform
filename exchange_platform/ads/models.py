@@ -80,12 +80,15 @@ class ExchangeProposal(models.Model):
     ad_sender = models.ForeignKey(
         to=Ad,
         on_delete=CASCADE,
-        related_name='sent_proposals'
+        related_name='sent_proposals',
+        verbose_name='Отправитель'
+
     )
     ad_receiver = models.ForeignKey(
         to=Ad,
         on_delete=CASCADE,
-        related_name='received_proposals'
+        related_name='received_proposals',
+        verbose_name='Получатель'
     )
     comment = models.TextField(
         max_length=3000,
