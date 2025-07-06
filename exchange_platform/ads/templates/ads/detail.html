@@ -1,30 +1,69 @@
 {% extends 'ads/base.html' %}
 
-{% block title %}
-    Объявление {{ object.title }}
+{% block title %}Объявление {{ object.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Стили для детальной страницы */
+    .ad-detail {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .ad-detail img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .action-links {
+        margin-top: 20px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .action-links a {
+        padding: 8px 16px;
+        background: #4a6fa5;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+
+    .action-links a:hover {
+        background: #3a5a8a;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
+<div class="ad-detail">
+    <h1>{{ object.title }}</h1>
+    <img src="{{ object.get_image_url }}" alt="img">
+    <p>{{ object.description }}</p>
+    <p>{{ object.category }}</p>
+    <p>{{ object.condition }}</p>
+    <p>{{ object.created_at }}</p>
+    <h3>{{ object.user.username }}</h3>
 
-<h1>ТЕСТ</h1>
-    <div>
-        <h1>{{ object.title }}</h1>
-        <img src="{{ object.get_image_url }}" alt="img">
-        <p> {{ object.description }} </p>
-        <p> {{ object.category }} </p>
-        <p> {{ object.condition }} </p>
-        <p> {{ object.created_at }} </p>
-        <h3> {{ object.user.username }} </h3>
+    <div class="action-links">
+        {% if user.username == object.user.username or user.is_staff %}
+            <a href="{% url 'ads:update_ad' pk=object.pk %}">Редактировать</a>
+            <a href="{% url 'ads:delete_ad' pk=object.pk %}">Удалить</a>
+        {% endif %}
+
+        {% if user.username != object.user.username %}
+            <a href="{% url 'ads:exc_props' pk=object.pk %}">Обмен</a>
+        {% endif %}
+
+        <a href="{% url 'ads:index' %}">Назад</a>
     </div>
-
-{% if user.username == object.user.username or user.is_staff %}
-    <a href="{% url 'ads:update_ad' pk=object.pk %}">Редактировать</a>
-    <a href="{% url 'ads:delete_ad' pk=object.pk %}">Удалить</a>
-{% endif %}
-
-{% if user.username != object.user.username%}
-    <a href="{% url 'ads:exc_props' pk=object.pk %}">Обмен</a>
-{% endif %}
-
-<a href="{% url 'ads:index' %}">Назад</a>
+</div>
 {% endblock %}

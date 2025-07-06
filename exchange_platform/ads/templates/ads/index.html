@@ -4,18 +4,9 @@
     Барахолка
 {% endblock %}
 
-{% block body %}
 
+{% block extra_css %}
 <style>
-    /* Общие стили */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        margin: 0;
-        padding: 20px;
-        color: #333;
-        min-height: 100vh;
-    }
 
     /* Стили формы фильтрации */
     form {
@@ -186,7 +177,9 @@
     }
 
 </style>
+{% endblock %}
 
+{% block body %}
 <!-- Форма фильтрации -->
     <form method="get">
          <!-- Поле поиска -->
