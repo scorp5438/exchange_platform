@@ -1,0 +1,44 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+{{ object }}
+{% endblock %}
+
+{% block body %}
+
+<h1> {{ object }} </h1>
+<ol>
+
+    <div>
+        <li>
+
+            <ul>
+                <h1>Модель Предложение</h1>
+                <li>Заголовок объявления отправителя {{ object.ad_sender }}</li>
+                <li>Заголовок объявления получателя {{ object.ad_receiver }}</li>
+                <li>Комментарий получателя {{ object.comment }}</li>
+                <li>Статус {{ object.status }}</li>
+                <li>Дата создания {{ exp.created_at }}</li>
+
+
+                <h1>Модель объявление</h1>
+                <h2>Отправитель</h2>
+                <li>Пользователь {{ object.ad_sender.user.username }}</li>
+                <li>Описание {{ object.ad_sende.description }}</li>
+                <li>Категория {{ object.ad_sender.category }}</li>
+                <li>Состояние {{ object.ad_sender.condition }}</li>
+
+
+                <h2>Получатель</h2>
+                <li>Пользователь {{ object.ad_receiver.user.username }}</li>
+                <li>Описание {{ object.ad_receiver.description }}</li>
+                <li>Категория {{ object.ad_receiver.category }}</li>
+                <li>Состояние {{ object.ad_receiver.condition }}</li>
+
+            </ul>
+        </li>
+    </div>
+
+</ol>
+<a href="{% url 'ads:exc_props_list' %}">Назад</a>
+{% endblock %}

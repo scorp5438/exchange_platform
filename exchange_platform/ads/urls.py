@@ -7,7 +7,8 @@ from .views import (
     UpdateAdView,
     DeleteAdView,
     CreateExcPropsView,
-    ExcPropsView
+    ExcPropsView,
+    DetailExcPropView
 )
 
 app_name = 'ads'
@@ -20,4 +21,5 @@ urlpatterns = [
     path('delete_ad/<int:pk>', DeleteAdView.as_view(), name='delete_ad'),
     path('exc_props/<int:pk>', CreateExcPropsView.as_view(), name='exc_props'),
     path('exc_props_list/', ExcPropsView.as_view(), name='exc_props_list'),
+    path('detail_exc_props/<int:pk>', DetailExcPropView.as_view(), name='detail_exc_props'),
 ]

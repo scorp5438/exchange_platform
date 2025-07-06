@@ -140,9 +140,13 @@ class ExcPropsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = ExchangeProposal.objects.filter(
-            Q(ad_sender__user=user) |
-            Q(ad_receiver__user=user)
+        queryset = ExchangeProposal.objects.select_related(
+            'ad_sender',
+            'ad_receiver',
+            'ad_sender__user',
+            'ad_receiver__user'
+        ).filter(
+            Q(ad_sender__user=user) | Q(ad_receiver__user=user)
         )
 
         status = self.request.GET.get('status')
@@ -150,18 +154,36 @@ class ExcPropsView(LoginRequiredMixin, ListView):
         if status:
             queryset = queryset.filter(status=status)
 
+        proposal_type = self.request.GET.get('type')
+        if proposal_type == 'sent':
+            queryset = queryset.filter(ad_sender__user=user)
+        elif proposal_type == 'received':
+            queryset = queryset.filter(ad_receiver__user=user)
+
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['status'] = ExchangeProposal.STATUSES
-        context['current_status'] = self.request.GET.get('status', '')
+        user = self.request.user
 
+        # Добавляем статистику для фильтров
+        context.update({
+            'status': ExchangeProposal.STATUSES,
+            'current_status': self.request.GET.get('status', ''),
+            'current_type': self.request.GET.get('type', ''),
+            'sent_count': ExchangeProposal.objects.filter(ad_sender__user=user).count(),
+            'received_count': ExchangeProposal.objects.filter(ad_receiver__user=user).count(),
+        })
         return context
 
-
-
-
+class DetailExcPropView(DetailView):
+    queryset = ExchangeProposal.objects.select_related(
+        'ad_sender',
+        'ad_receiver',
+        'ad_sender__user',
+        'ad_receiver__user'
+    )
+    template_name = 'ads/detail_exc_props.html'
 
 
 
