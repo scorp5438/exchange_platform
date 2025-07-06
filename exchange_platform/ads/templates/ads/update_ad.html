@@ -1,0 +1,16 @@
+{% extends 'ads/base.html' %}
+
+    {% block title %}
+        Добавление рецепта
+    {% endblock%}
+
+    {% block body %}
+
+        <form method="post" enctype="multipart/form-data">
+            <h1>Редактирование рецепта: {{ object }}</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Сохранить</button>
+        </form>
+        <a href="{% url 'ads:detail_ad' pk=object.pk %}">Назад</a>
+    {% endblock%}

@@ -16,5 +16,10 @@
         <p> {{ object.created_at }} </p>
         <h3> {{ object.user.username }} </h3>
     </div>
+
+{% if user.username == object.user.username %}
+    <a href="{% url 'ads:update_ad' pk=object.pk %}">Редактировать</a>
+{% endif %}
+
 <a href="{% url 'ads:index' %}">Назад</a>
 {% endblock %}
