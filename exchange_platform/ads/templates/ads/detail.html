@@ -22,5 +22,9 @@
     <a href="{% url 'ads:delete_ad' pk=object.pk %}">Удалить</a>
 {% endif %}
 
+{% if user.username != object.user.username%}
+    <a href="{% url 'ads:exc_props' pk=object.pk %}">Обмен</a>
+{% endif %}
+
 <a href="{% url 'ads:index' %}">Назад</a>
 {% endblock %}

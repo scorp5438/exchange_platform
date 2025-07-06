@@ -18,7 +18,9 @@
             <p class="auth">Вы не авторизованы</p>
         {% else %}
             <p class="auth" >{{ user }}</p>
+            <p class="auth"> <a href="{% url 'ads:index' %}">Главная</a></p>
             <p class="auth"> <a href="{% url 'ads:create_ad' %}">Новое объявление</a></p>
+            <p class="auth"> <a href="{% url 'ads:exc_props_list' %}">Предложения обмена</a></p>
         {% endif %}
         {% if user.is_staff %}
            <p class="auth"> <a href="{% url 'admin:index' %}">Админ-панель</a></p>

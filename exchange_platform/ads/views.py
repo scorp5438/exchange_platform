@@ -3,8 +3,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import AdForm
-from .models import Ad, Category
+from .forms import AdForm, ExchangeProposalForm
+from .models import Ad, ExchangeProposal, Category
 
 
 class IndexView(ListView):
@@ -12,7 +12,22 @@ class IndexView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        queryset = Ad.objects.select_related('category', 'user').all()
+        sent_ids = ExchangeProposal.objects.filter(
+            status__in=['ожидает', 'принята'],
+        ).values_list('ad_sender_id', flat=True)
+
+        received_ids = ExchangeProposal.objects.filter(
+            status__in=['ожидает', 'принята'],
+        ).values_list('ad_receiver_id', flat=True)
+
+        excluded_ids = set(sent_ids) | set(received_ids)
+
+        queryset = Ad.objects.select_related(
+            'category',
+            'user'
+        ).exclude(
+            id__in=excluded_ids
+        )
 
         category_id = self.request.GET.get('category')
         condition = self.request.GET.get('condition')
@@ -68,8 +83,6 @@ class UpdateAdView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Ad
     template_name = 'ads/update_ad.html'
     form_class = AdForm
-    # fields = 'title', 'description', 'image_url', 'category', 'condition'
-    # success_url = reverse_lazy('ads:detail_ad')
 
     def get_success_url(self):
         return reverse('ads:detail_ad', kwargs={'pk': self.object.pk})
@@ -93,3 +106,72 @@ class DeleteAdView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
         created_by_current_user = self.get_object().user == self.request.user
         return created_by_current_user
+
+
+class CreateExcPropsView(LoginRequiredMixin, CreateView):
+    model = ExchangeProposal
+    template_name = 'ads/create_exc_props.html'
+    form_class = ExchangeProposalForm
+
+    def get_success_url(self):
+        return reverse('ads:detail_ad', kwargs={'pk': self.object.ad_receiver.pk})
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ad_receiver'] = Ad.objects.filter(id=self.kwargs.get('pk')).first()
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.ad_receiver = Ad.objects.get(id=self.kwargs.get('pk'))
+        return super().form_valid(form)
+
+
+# Фильтрация по отправителю, получателю или статусу.
+
+class ExcPropsView(LoginRequiredMixin, ListView):
+    model = ExchangeProposal
+    template_name = 'ads/exc_props.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = ExchangeProposal.objects.filter(
+            Q(ad_sender__user=user) |
+            Q(ad_receiver__user=user)
+        )
+
+        status = self.request.GET.get('status')
+
+        if status:
+            queryset = queryset.filter(status=status)
+
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status'] = ExchangeProposal.STATUSES
+        context['current_status'] = self.request.GET.get('status', '')
+
+        return context
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

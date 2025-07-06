@@ -1,0 +1,73 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+Сайт рецептов
+{% endblock %}
+
+{% block body %}
+
+<!-- Форма фильтрации -->
+
+<!-- Фильтр по состоянию -->
+<form method="get">
+        <div>
+        <label for="status">Статус:</label>
+        <select name="status" id="status">
+            <option value="">Любое состояние</option>
+            {% for value, name in status %}
+                <option value="{{ value }}"
+                    {% if current_status == value %}selected{% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit">Применить фильтры</button>
+    <a href="?">Сбросить фильтры</a>
+
+</form>
+<div class="ads-list">
+    <h1>Мои предложения</h1>
+    {% if object_list %}
+    <ol>
+        {% for exp in object_list %}
+        <div class="ads-item">
+            <li>
+
+                <ul>
+                    <h1>Модель Предложение</h1>
+                    <li>Заголовок объявления отправителя {{ exp.ad_sender }}</li>
+                    <li>Заголовок объявления получателя {{ exp.ad_receiver }}</li>
+                    <li>Комментарий получателя {{ exp.comment }}</li>
+                    <li>Статус {{ exp.status }}</li>
+                    <li>Дата создания {{ exp.created_at }}</li>
+
+
+                    <h1>Модель объявление</h1>
+                    <h2>Отправитель</h2>
+                    <li>Пользователь {{ exp.ad_sender.user.username }}</li>
+                    <li>Описание {{ exp.ad_sende.description }}</li>
+                    <li>Категория {{ exp.ad_sender.category }}</li>
+                    <li>Состояние {{ exp.ad_sender.condition }}</li>
+
+
+                    <h2>Получатель</h2>
+                    <li>Пользователь {{ exp.ad_receiver.user.username }}</li>
+                    <li>Описание {{ exp.ad_receiver.description }}</li>
+                    <li>Категория {{ exp.ad_receiver.category }}</li>
+                    <li>Состояние {{ exp.ad_receiver.condition }}</li>
+
+                </ul>
+            </li>
+        </div>
+        {% endfor %}
+    </ol>
+    {% else %}
+    <p>Еще нет ни одного объявления...</p>
+    {% endif %}
+
+    <!-- Пагинация -->
+
+
+</div>
+{% endblock %}

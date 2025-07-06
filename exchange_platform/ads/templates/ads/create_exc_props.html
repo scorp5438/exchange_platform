@@ -1,0 +1,21 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+    Объявление {{ ad_receiver.title }}
+{% endblock %}
+
+{% block body %}
+    {{ ads }}
+    <h1>Предложение обмена</h1>
+    <p>Вы предлагаете обмен для объявления: <strong>{{ ad_receiver.title }}</strong></p>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Отправить предложение</button>
+        </form>
+
+    </div>
+
+<a href="{% url 'ads:detail_ad' pk=ad_receiver.pk %}">Назад</a>
+{% endblock %}
