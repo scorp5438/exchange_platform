@@ -17,8 +17,9 @@
         <h3> {{ object.user.username }} </h3>
     </div>
 
-{% if user.username == object.user.username %}
+{% if user.username == object.user.username or user.is_staff %}
     <a href="{% url 'ads:update_ad' pk=object.pk %}">Редактировать</a>
+    <a href="{% url 'ads:delete_ad' pk=object.pk %}">Удалить</a>
 {% endif %}
 
 <a href="{% url 'ads:index' %}">Назад</a>

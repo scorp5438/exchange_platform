@@ -6,33 +6,96 @@
 
 {% block body %}
 
+    <!-- Форма фильтрации -->
+<form method="get">
+     <!-- Поле поиска -->
+    <div>
+        <label for="search">Поиск:</label>
+        <input type="text" name="search" id="search"
+               value="{{ search_query }}" placeholder="Введите ключевые слова">
+    </div>
 
-    <div class="ads-list">
-        <h1>Список объявлений</h1>
-        {% if object_list %}
-            <ol>
-                {% for ads in object_list %}
-                    <div class="ads-item">
-                        <li>
+    <!-- Фильтр по категории -->
+    {{ current_category }}
+    <div>
 
-                            <img src="{{ ads.get_image_url }}" alt="{{ ads.title }}">
-                            <h2><a href="{% url 'ads:detail_ad' pk=ads.pk %}">{{ ads.title }}</a></h2>
+        <label for="category">Категория:</label>
+        <select name="category" id="category">
+            <option value="">Все категории</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if current_category == category.id|stringformat:"s" %}selected{% endif %}>
+                    {{ category.category_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
 
-                            <ul>
-                                <li><strong>Описание:</strong> {{ ads.description }}</li>
-                                <li><strong>Автор объявления:</strong> {{ ads.user.username }}</li>
-                                <li><strong>Категория:</strong> {{ ads.category }}</li>
-                                <li><strong>Состояние товара:</strong> {{ ads.condition }}</li>
-                                <li><strong>Дата добавления:</strong> {{ ads.created_at }}</li>
-                            </ul>
-                        </li>
-                    </div>
-                {% endfor %}
-            </ol>
-        {% else %}
-            <p>Еще нет ни одного объявления...</p>
+    <!-- Фильтр по состоянию -->
+    <div>
+        <label for="condition">Состояние:</label>
+        <select name="condition" id="condition">
+            <option value="">Любое состояние</option>
+            {% for value, name in conditions %}
+                <option value="{{ value }}"
+                    {% if current_condition == value %}selected{% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit">Применить фильтры</button>
+    <a href="?">Сбросить фильтры</a>
+</form>
+
+<div class="ads-list">
+    <h1>Список объявлений</h1>
+    {% if object_list %}
+        <ol>
+            {% for ads in object_list %}
+                <div class="ads-item">
+                    <li>
+
+                        <img src="{{ ads.get_image_url }}" alt="{{ ads.title }}">
+                        <h2><a href="{% url 'ads:detail_ad' pk=ads.pk %}">{{ ads.title }}</a></h2>
+
+                        <ul>
+                            <li><strong>Описание:</strong> {{ ads.description }}</li>
+                            <li><strong>Автор объявления:</strong> {{ ads.user.username }}</li>
+                            <li><strong>Категория:</strong> {{ ads.category }}</li>
+                            <li><strong>Состояние товара:</strong> {{ ads.condition }}</li>
+                            <li><strong>Дата добавления:</strong> {{ ads.created_at }}</li>
+                        </ul>
+                    </li>
+                </div>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Еще нет ни одного объявления...</p>
+    {% endif %}
+
+    <!-- Пагинация -->
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">←</a>
         {% endif %}
 
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
 
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">→</a>
+        {% endif %}
     </div>
+    {% endif %}
+
+
+</div>
 {% endblock %}
