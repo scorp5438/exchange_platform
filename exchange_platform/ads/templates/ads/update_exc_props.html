@@ -1,20 +1,13 @@
 {% extends 'ads/base.html' %}
 
 {% block title %}
-    Объявление {{ ad_receiver.title }}
-{% endblock %}
+    Добавление рецепта
+{% endblock%}
 
 {% block extra_css %}
 <style>
     /* Основные стили страницы */
-    body {
-        background-color: #f5f7fa;
-        color: #2c3e50;
-        line-height: 1.6;
-    }
-
-    /* Контейнер формы */
-    .exchange-container {
+    .edit-exchange-container {
         max-width: 800px;
         margin: 30px auto;
         padding: 30px;
@@ -26,48 +19,39 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    /* Заголовки */
-    .exchange-container h1 {
+    /* Заголовок */
+    .edit-exchange-container h1 {
         text-align: center;
         color: #2c3e50;
-        margin-bottom: 25px;
-        font-size: 1.8rem;
-    }
-
-    .exchange-container p {
-        text-align: center;
         margin-bottom: 30px;
-        font-size: 1.1rem;
-    }
-
-    .exchange-container strong {
-        color: #4a6fa5;
+        font-size: 1.8rem;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     /* Стили формы */
-    .exchange-form {
+    .edit-exchange-form {
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
 
-    .exchange-form p {
+    .edit-exchange-form p {
         margin: 0;
         display: flex;
         flex-direction: column;
         gap: 8px;
-        text-align: left;
     }
 
-    .exchange-form label {
+    .edit-exchange-form label {
         font-weight: 600;
         color: #2c3e50;
         font-size: 0.95rem;
     }
 
-    .exchange-form input,
-    .exchange-form select,
-    .exchange-form textarea {
+    .edit-exchange-form input,
+    .edit-exchange-form select,
+    .edit-exchange-form textarea {
         padding: 12px 15px;
         border: 1px solid rgba(255, 255, 255, 0.5);
         border-radius: 8px;
@@ -76,15 +60,15 @@
         transition: all 0.3s ease;
     }
 
-    .exchange-form input:focus,
-    .exchange-form select:focus,
-    .exchange-form textarea:focus {
+    .edit-exchange-form input:focus,
+    .edit-exchange-form select:focus,
+    .edit-exchange-form textarea:focus {
         outline: none;
         background: rgba(255, 255, 255, 0.5);
         box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.3);
     }
 
-    .exchange-form textarea {
+    .edit-exchange-form textarea {
         min-height: 100px;
         resize: vertical;
     }
@@ -107,12 +91,12 @@
         font-size: 1rem;
     }
 
-    .btn-submit {
+    .btn-save {
         background: #4a6fa5;
         color: white;
     }
 
-    .btn-submit:hover {
+    .btn-save:hover {
         background: #3a5a80;
         box-shadow: 0 4px 8px rgba(74, 111, 165, 0.3);
     }
@@ -140,19 +124,15 @@
 {% endblock %}
 
 {% block body %}
-<div class="exchange-container">
-    <h1>Предложение обмена</h1>
-    <p>Вы предлагаете обмен для объявления: <strong>{{ ad_receiver.title }}</strong></p>
-
-    <div class="exchange-form">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-actions">
-                <a href="{% url 'ads:detail_ad' pk=ad_receiver.pk %}" class="btn btn-back">Назад</a>
-                <button type="submit" class="btn btn-submit">Отправить предложение</button>
-            </div>
-        </form>
-    </div>
+<div class="edit-exchange-container">
+    <form method="post" enctype="multipart/form-data" class="edit-exchange-form">
+        <h1>Редактирование предложения обмена: {{ object.ad_receiver }}</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <a href="{% url 'ads:detail_exc_props' pk=object.pk %}" class="btn btn-back">Назад</a>
+            <button type="submit" class="btn btn-save">Сохранить</button>
+        </div>
+    </form>
 </div>
 {% endblock %}

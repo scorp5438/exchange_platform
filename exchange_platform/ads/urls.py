@@ -8,7 +8,8 @@ from .views import (
     DeleteAdView,
     CreateExcPropsView,
     ExcPropsView,
-    DetailExcPropView
+    DetailExcPropView,
+    UpdateExcPropsView
 )
 
 app_name = 'ads'
@@ -22,4 +23,5 @@ urlpatterns = [
     path('exc_props/<int:pk>', CreateExcPropsView.as_view(), name='exc_props'),
     path('exc_props_list/', ExcPropsView.as_view(), name='exc_props_list'),
     path('detail_exc_props/<int:pk>', DetailExcPropView.as_view(), name='detail_exc_props'),
+    path('update_exc_props/<int:pk>', UpdateExcPropsView.as_view(), name='update_exc_props'),
 ]

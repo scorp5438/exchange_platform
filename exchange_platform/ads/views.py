@@ -1,23 +1,25 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import AdForm, ExchangeProposalForm
+from .forms import AdForm, CreateExchangeProposalForm, SenderUpdateExchangeProposalForm, \
+    ReceiverUpdateExchangeProposalForm
 from .models import Ad, ExchangeProposal, Category
 
 
 class IndexView(ListView):
     template_name = 'ads/index.html'
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         sent_ids = ExchangeProposal.objects.filter(
-            status__in=['ожидает', 'принята'],
+            status__in=['принята'],
         ).values_list('ad_sender_id', flat=True)
 
         received_ids = ExchangeProposal.objects.filter(
-            status__in=['ожидает', 'принята'],
+            status__in=['принята'],
         ).values_list('ad_receiver_id', flat=True)
 
         excluded_ids = set(sent_ids) | set(received_ids)
@@ -71,7 +73,6 @@ class CreateAdView(LoginRequiredMixin, CreateView):
     model = Ad
     template_name = 'ads/create_ad.html'
     form_class = AdForm
-    # fields = 'title', 'description', 'image_url', 'category', 'condition',
     success_url = reverse_lazy('ads:index')
 
     def form_valid(self, form):
@@ -111,7 +112,7 @@ class DeleteAdView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CreateExcPropsView(LoginRequiredMixin, CreateView):
     model = ExchangeProposal
     template_name = 'ads/create_exc_props.html'
-    form_class = ExchangeProposalForm
+    form_class = CreateExchangeProposalForm
 
     def get_success_url(self):
         return reverse('ads:detail_ad', kwargs={'pk': self.object.ad_receiver.pk})
@@ -131,8 +132,6 @@ class CreateExcPropsView(LoginRequiredMixin, CreateView):
         form.instance.ad_receiver = Ad.objects.get(id=self.kwargs.get('pk'))
         return super().form_valid(form)
 
-
-# Фильтрация по отправителю, получателю или статусу.
 
 class ExcPropsView(LoginRequiredMixin, ListView):
     model = ExchangeProposal
@@ -186,14 +185,23 @@ class DetailExcPropView(DetailView):
     template_name = 'ads/detail_exc_props.html'
 
 
+class UpdateExcPropsView(UpdateView):
+    model = ExchangeProposal
+    template_name = 'ads/update_exc_props.html'
 
+    def get_success_url(self):
+        return reverse('ads:detail_exc_props', kwargs={'pk': self.object.pk})
 
+    def test_func(self):
+        created_by_current_user = self.get_object().ad_sender.user == self.request.user
+        return created_by_current_user
 
+    def get_form_class(self):
+        proposal = self.get_object()
 
-
-
-
-
-
-
-
+        if proposal.ad_sender.user == self.request.user:
+            return SenderUpdateExchangeProposalForm
+        elif proposal.ad_receiver.user == self.request.user:
+            return ReceiverUpdateExchangeProposalForm
+        else:
+            raise PermissionDenied("У вас нет прав для редактирования этого предложения.")

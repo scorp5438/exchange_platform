@@ -1,16 +1,128 @@
 {% extends 'ads/base.html' %}
 
-    {% block title %}
-        Добавление рецепта
-    {% endblock%}
+{% block title %}
+    Редактирование рецепта
+{% endblock%}
 
-    {% block body %}
+{% block extra_css %}
+<style>
+    /* Стили для формы редактирования */
+    .edit-form {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
 
+    .edit-form h1 {
+        margin-top: 0;
+        color: #2c3e50;
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+
+    .edit-form p {
+        margin-bottom: 20px;
+    }
+
+    .edit-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .edit-form input[type="text"],
+    .edit-form input[type="file"],
+    .edit-form select,
+    .edit-form textarea {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-form input[type="text"]:focus,
+    .edit-form input[type="file"]:focus,
+    .edit-form select:focus,
+    .edit-form textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.3);
+    }
+
+    .edit-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .edit-form button[type="submit"] {
+        background: #4a6fa5;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s ease;
+        display: block;
+        margin: 30px auto 0;
+    }
+
+    .edit-form button[type="submit"]:hover {
+        background: #3a5a8a;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #2c3e50;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        background: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+    }
+
+    /* Стили для ошибок формы */
+    .errorlist {
+        color: #e74c3c;
+        padding-left: 0;
+        list-style: none;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Стили для чекбоксов */
+    .edit-form input[type="checkbox"] {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="edit-form">
         <form method="post" enctype="multipart/form-data">
-            <h1>Редактирование рецепта: {{ object }}</h1>
+            <h1>Редактирование объявления: '{{ object }}'</h1>
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Сохранить</button>
         </form>
-        <a href="{% url 'ads:detail_ad' pk=object.pk %}">Назад</a>
-    {% endblock%}
+        <a href="{% url 'ads:detail_ad' pk=object.pk %}" class="back-link">Назад</a>
+    </div>
+{% endblock%}

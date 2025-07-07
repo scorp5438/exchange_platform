@@ -1,44 +1,228 @@
 {% extends 'ads/base.html' %}
 
 {% block title %}
-{{ object }}
+Детали предложения #{{ object.pk }}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основные стили для страницы деталей */
+    .offer-detail {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .offer-detail h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+
+    /* Стили для мета-информации */
+    .offer-meta {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .meta-item {
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        font-size: 0.95rem;
+    }
+
+    .meta-item strong {
+        color: #4a6fa5;
+    }
+
+    /* Стили для блоков отправителя/получателя */
+    .offer-parties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .party-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .party-card.sender {
+        border-top: 4px solid #4a6fa5;
+    }
+
+    .party-card.receiver {
+        border-top: 4px solid #6a5acd;
+    }
+
+    .party-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        font-size: 1.3rem;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .party-user {
+        margin-bottom: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+    }
+
+    .party-user strong {
+        color: #4a6fa5;
+    }
+
+    .party-ad h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: #2c3e50;
+    }
+
+    .ad-details p {
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+
+    .ad-details strong {
+        color: #4a6fa5;
+    }
+
+    /* Стили для кнопок действий */
+    .offer-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.3);
+        color: #2c3e50;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-edit {
+        background: #4a6fa5;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #3a5a80;
+        box-shadow: 0 4px 8px rgba(74, 111, 165, 0.3);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .offer-parties {
+            grid-template-columns: 1fr;
+        }
+
+        .offer-meta {
+            flex-direction: column;
+        }
+
+        .offer-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block body %}
+<div class="offer-detail">
+    <h1>Детали предложения #{{ object.pk }}</h1>
 
-<h1> {{ object }} </h1>
-<ol>
-
-    <div>
-        <li>
-
-            <ul>
-                <h1>Модель Предложение</h1>
-                <li>Заголовок объявления отправителя {{ object.ad_sender }}</li>
-                <li>Заголовок объявления получателя {{ object.ad_receiver }}</li>
-                <li>Комментарий получателя {{ object.comment }}</li>
-                <li>Статус {{ object.status }}</li>
-                <li>Дата создания {{ exp.created_at }}</li>
-
-
-                <h1>Модель объявление</h1>
-                <h2>Отправитель</h2>
-                <li>Пользователь {{ object.ad_sender.user.username }}</li>
-                <li>Описание {{ object.ad_sende.description }}</li>
-                <li>Категория {{ object.ad_sender.category }}</li>
-                <li>Состояние {{ object.ad_sender.condition }}</li>
-
-
-                <h2>Получатель</h2>
-                <li>Пользователь {{ object.ad_receiver.user.username }}</li>
-                <li>Описание {{ object.ad_receiver.description }}</li>
-                <li>Категория {{ object.ad_receiver.category }}</li>
-                <li>Состояние {{ object.ad_receiver.condition }}</li>
-
-            </ul>
-        </li>
+    <div class="offer-meta">
+        <div class="meta-item">
+            <strong>Статус:</strong> {{ object.status }}
+        </div>
+        <div class="meta-item">
+            <strong>Дата создания:</strong> {{ object.created_at }}
+        </div>
+        {% if object.comment %}
+        <div class="meta-item">
+            <strong>Комментарий:</strong> {{ object.comment }}
+        </div>
+        {% endif %}
     </div>
 
-</ol>
-<a href="{% url 'ads:exc_props_list' %}">Назад</a>
+    <div class="offer-parties">
+        <div class="party-card sender">
+            <h2>Отправитель</h2>
+            <div class="party-user">
+                <strong>Пользователь:</strong> {{ object.ad_sender.user.username }}
+            </div>
+            <div class="party-ad">
+                <h3>Объявление: {{ object.ad_sender }}</h3>
+                <div class="ad-details">
+                    <p><strong>Описание:</strong> {{ object.ad_sender.description }}</p>
+                    <p><strong>Категория:</strong> {{ object.ad_sender.category }}</p>
+                    <p><strong>Состояние:</strong> {{ object.ad_sender.condition }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="party-card receiver">
+            <h2>Получатель</h2>
+            <div class="party-user">
+                <strong>Пользователь:</strong> {{ object.ad_receiver.user.username }}
+            </div>
+            <div class="party-ad">
+                <h3>Объявление: {{ object.ad_receiver }}</h3>
+                <div class="ad-details">
+                    <p><strong>Описание:</strong> {{ object.ad_receiver.description }}</p>
+                    <p><strong>Категория:</strong> {{ object.ad_receiver.category }}</p>
+                    <p><strong>Состояние:</strong> {{ object.ad_receiver.condition }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offer-actions">
+        <a href="{% url 'ads:exc_props_list' %}" class="btn btn-back">Назад к списку</a>
+        <a href="{% url 'ads:update_exc_props' pk=object.pk %}" class="btn btn-edit">Изменить предложение</a>
+    </div>
+</div>
+
 {% endblock %}

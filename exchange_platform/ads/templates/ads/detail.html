@@ -16,7 +16,7 @@
     }
 
     .ad-detail img {
-        max-width: 100%;
+        width: 100%;
         height: auto;
         border-radius: 10px;
         margin-bottom: 15px;
@@ -47,11 +47,11 @@
 <div class="ad-detail">
     <h1>{{ object.title }}</h1>
     <img src="{{ object.get_image_url }}" alt="img">
-    <p>{{ object.description }}</p>
-    <p>{{ object.category }}</p>
-    <p>{{ object.condition }}</p>
-    <p>{{ object.created_at }}</p>
-    <h3>{{ object.user.username }}</h3>
+    <p><strong>Описание</strong> : {{ object.description }}</p>
+    <p><strong>Категория</strong>  {{ object.category }}</p>
+    <p><strong>Состояние</strong> : {{ object.condition }}</p>
+    <p><strong>Создано</strong> : {{ object.created_at }}</p>
+    <p><strong>Пользователь</strong> : {{ object.user.username }}</p>
 
     <div class="action-links">
         {% if user.username == object.user.username or user.is_staff %}

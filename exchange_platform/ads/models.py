@@ -59,6 +59,7 @@ class Ad(models.Model):
     )
 
     class Meta:
+        ordering = ['pk']
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявление'
 
@@ -66,6 +67,9 @@ class Ad(models.Model):
         """Возвращает относительный URL изображения или None если изображения нет"""
         # return f'/media/{self.image_url.name}' if self.image_url else None
         return self.image_url.url if self.image_url else None
+
+    def get_short_description(self):
+        return f'{self.description[:25]}...'
 
     def __str__(self):
         return self.title
@@ -127,6 +131,7 @@ class Category(models.Model):
     )
 
     class Meta:
+        ordering = ['pk']
         verbose_name = 'Категорию'
         verbose_name_plural = 'Категория'
 

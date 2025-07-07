@@ -4,59 +4,92 @@
     Login
 {% endblock %}
 
-{% block body %}
+{% block extra_css %}
 <style>
-
+    /* Стили формы входа */
     .login {
-      max-width: 450px;
-      margin: 20% auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 15px;
-      background-color: #f9f9f98f;
-      box-shadow: 7px -2px 10px rgb(0 0 0 / 32%);
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 400px;
+        margin: 350px auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    .login a {
-        color: #2049e7;
-        margin-top: 10px;
-        display: flex;
-        justify-content: center;
+    .login p {
+        margin-bottom: 20px;
     }
 
     .login label {
-        font-weight: bold;
-        margin-top: 10px;
         display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
     }
 
     .login input[type="text"],
     .login input[type="password"] {
-        width: 97%;
-        padding: 10px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 15px;
+        width: 95%;
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
         font-size: 16px;
     }
 
+    .login input[type="text"]:focus,
+    .login input[type="password"]:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.3);
+    }
+
     .btn-submit {
-        border: inherit;
-        background-color: #a6ffe1;
-        border-radius: 15px;
-        width: 97%;
-        height: 35px;
-        font-size: 15px;
-        font-weight: bold;
+        width: 100%;
+        padding: 12px;
+        background: #4a6fa5;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-bottom: 20px;
     }
 
     .btn-submit:hover {
-        background-color: #52f7bf;
+        background: #3a5a8a;
     }
 
+    .login a {
+        display: block;
+        text-align: center;
+        color: #4a6fa5;
+        transition: color 0.3s ease;
+    }
 
+    .login a:hover {
+        color: #2c3e50;
+        text-decoration: underline;
+    }
+
+    /* Ошибки формы */
+    .login .errorlist {
+        color: #e74c3c;
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+        font-size: 14px;
+    }
 </style>
+{% endblock %}
+
+{% block body %}
 <div>
     <form class="login" method="post">
             {% csrf_token %}
@@ -65,5 +98,4 @@
         <a href="{% url 'accounts:register' %}">Зарегистрироваться</a>
     </form>
 </div>
-
 {% endblock %}<br>

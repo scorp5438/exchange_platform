@@ -1,10 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .pagination import InfiniteScrollPagination
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsSenderOrReadOnly
 from .serializers import AdSerializer, ExchangeProposalSerializer, CategorySerializer
 from ..models import Ad, ExchangeProposal, Category
 from .filters import ExchangeProposalFilter
@@ -13,15 +12,21 @@ class AdViewSet(ModelViewSet):
     queryset = Ad.objects.select_related('category', 'user').all()
     serializer_class = AdSerializer
     pagination_class = InfiniteScrollPagination
-    permission_classes = [IsOwnerOrReadOnly, IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly,]
     http_method_names = ['get', 'post', 'patch', 'delete']
+
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter
     ]
 
-    filterset_fields = ['title', 'description', 'condition', 'category']
+    filterset_fields = {
+        'title': ['exact', 'icontains'],
+        'description': ['exact', 'icontains'],
+        'condition': ['exact'],
+        'category': ['exact'],
+    }
     search_fields = ['title', 'description', 'category__category_name', ]
     ordering_fields = ['pk', 'title', 'type', 'condition', 'created_at', ]
     ordering = ['pk']
@@ -34,6 +39,7 @@ class ExchangeProposalViewSet(ModelViewSet):
     queryset = ExchangeProposal.objects.select_related('ad_sender__user', 'ad_receiver__user').all()
     serializer_class = ExchangeProposalSerializer
     pagination_class = InfiniteScrollPagination
+    permission_classes = [IsSenderOrReadOnly]
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = [
         DjangoFilterBackend,

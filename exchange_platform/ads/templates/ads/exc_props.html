@@ -4,84 +4,231 @@
 Сайт рецептов
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Стили для формы фильтрации предложений */
+    form[method="get"] {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+    }
+
+    form[method="get"] div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    form[method="get"] label {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    form[method="get"] select {
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    form[method="get"] select:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.3);
+    }
+
+    form[method="get"] a {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #2c3e50;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    form[method="get"] a:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Стили для списка предложений */
+    .ads-list {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .ads-list h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    .offers-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .offer-item {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .offer-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .offer-item h2 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.4rem;
+    }
+
+    .offer-item h2 a {
+        color: #2c3e50;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .offer-item h2 a:hover {
+        color: #4a6fa5;
+    }
+
+    .offer-status {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .offer-status strong {
+        color: #4a6fa5;
+    }
+
+    .offer-parties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .offer-party {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .offer-party h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: #2c3e50;
+    }
+
+    .offer-party p {
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .offer-party strong {
+        color: #4a6fa5;
+    }
+
+    /* Сообщение об отсутствии предложений */
+    .ads-list > p {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+    }
+
+</style>
+{% endblock %}
+
 {% block body %}
-
 <!-- Форма фильтрации -->
-
-
 <form method="get">
-    <!-- Фильтр по статусу -->
     <div>
         <label for="status">Статус:</label>
         <select name="status" id="status" onchange="this.form.submit()">
             <option value="">Любое состояние</option>
             {% for value, name in status %}
-            <option value="{{ value }}"
-                    {% if current_status == value %}selected{% endif %}>
+            <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
                 {{ name }}
             </option>
             {% endfor %}
         </select>
     </div>
-    <!-- Фильтр по типу -->
     <div>
         <label for="type">Тип предложения:</label>
         <select name="type" id="type" onchange="this.form.submit()">
             <option value="">Все предложения</option>
             <option value="sent" {% if current_type == 'sent' %}selected{% endif %}>
-            Мои предложения (отправленные)
+                Мои предложения (отправленные)
             </option>
             <option value="received" {% if current_type == 'received' %}selected{% endif %}>
-            Полученные предложения
+                Полученные предложения
             </option>
         </select>
     </div>
     <a href="?">Сбросить фильтры</a>
-
 </form>
+
 <div class="ads-list">
     <h1>Мои предложения</h1>
     {% if object_list %}
-    <ol>
+    <ol class="offers-list">
         {% for exp in object_list %}
-        <div class="ads-item">
-            <li>
+        <li class="offer-item">
+            <h2><a href="{% url 'ads:detail_exc_props' pk=exp.pk %}">Предложение #{{ exp.pk }}</a></h2>
 
-                <ul>
-                    <h2><a href="{% url 'ads:detail_exc_props' pk=exp.pk %}">{{ exp }}</a></h2>
-                    <h3>Модель Предложение</h3>
-                    <li>Заголовок объявления отправителя {{ exp.ad_sender }}</li>
-                    <li>Заголовок объявления получателя {{ exp.ad_receiver }}</li>
-                    <li>Комментарий получателя {{ exp.comment }}</li>
-                    <li>Статус {{ exp.status }}</li>
-                    <li>Дата создания {{ exp.created_at }}</li>
+            <div class="offer-status">
+                <strong>Статус:</strong> {{ exp.get_status_display }} |
+                <strong>Дата:</strong> {{ exp.created_at }} |
+                <strong>Комментарий:</strong> {{ exp.comment }}
+            </div>
 
+            <div class="offer-parties">
+                <div class="offer-party">
+                    <h3>Отправитель ({{ exp.ad_sender.user.username }})</h3>
+                    <p><strong>Объявление:</strong> {{ exp.ad_sender.title }}</p>
+                    <p><strong>Категория:</strong> {{ exp.ad_sender.category.category_name }}</p>
+                    <p><strong>Состояние:</strong> {{ exp.ad_sender.get_condition_display }}</p>
+                </div>
 
-                    <h3>Модель объявление</h3>
-                    <h4>Отправитель</h4>
-                    <li>Пользователь {{ exp.ad_sender.user.username }}</li>
-                    <li>Описание {{ exp.ad_sende.description }}</li>
-                    <li>Категория {{ exp.ad_sender.category }}</li>
-                    <li>Состояние {{ exp.ad_sender.condition }}</li>
-
-
-                    <h3>Получатель</h3>
-                    <li>Пользователь {{ exp.ad_receiver.user.username }}</li>
-                    <li>Описание {{ exp.ad_receiver.description }}</li>
-                    <li>Категория {{ exp.ad_receiver.category }}</li>
-                    <li>Состояние {{ exp.ad_receiver.condition }}</li>
-
-                </ul>
-            </li>
-        </div>
+                <div class="offer-party">
+                    <h3>Получатель ({{ exp.ad_receiver.user.username }})</h3>
+                    <p><strong>Объявление:</strong> {{ exp.ad_receiver.title }}</p>
+                    <p><strong>Категория:</strong> {{ exp.ad_receiver.category.category_name }}</p>
+                    <p><strong>Состояние:</strong> {{ exp.ad_receiver.get_condition_display }}</p>
+                </div>
+            </div>
+        </li>
         {% endfor %}
     </ol>
     {% else %}
-    <p>Еще нет ни одного объявления...</p>
+    <p>Еще нет ни одного предложения...</p>
     {% endif %}
-
-    <!-- Пагинация -->
-
-
 </div>
 {% endblock %}

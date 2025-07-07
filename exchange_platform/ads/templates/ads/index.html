@@ -234,7 +234,7 @@
                             <h2><a href="{% url 'ads:detail_ad' pk=ads.pk %}">{{ ads.title }}</a></h2>
 
                             <ul>
-                                <li><strong>Описание:</strong> {{ ads.description }}</li>
+                                <li><strong>Описание:</strong> {{ ads.get_short_description }}</li>
                                 <li><strong>Автор объявления:</strong> {{ ads.user.username }}</li>
                                 <li><strong>Категория:</strong> {{ ads.category }}</li>
                                 <li><strong>Состояние товара:</strong> {{ ads.condition }}</li>
