@@ -109,30 +109,6 @@ class DeleteAdView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return created_by_current_user
 
 
-class CreateExcPropsView(LoginRequiredMixin, CreateView):
-    model = ExchangeProposal
-    template_name = 'ads/create_exc_props.html'
-    form_class = CreateExchangeProposalForm
-
-    def get_success_url(self):
-        return reverse('ads:detail_ad', kwargs={'pk': self.object.ad_receiver.pk})
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ad_receiver'] = Ad.objects.filter(id=self.kwargs.get('pk')).first()
-        return context
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.ad_receiver = Ad.objects.get(id=self.kwargs.get('pk'))
-        return super().form_valid(form)
-
-
 class ExcPropsView(LoginRequiredMixin, ListView):
     model = ExchangeProposal
     template_name = 'ads/exc_props.html'
@@ -174,6 +150,31 @@ class ExcPropsView(LoginRequiredMixin, ListView):
             'received_count': ExchangeProposal.objects.filter(ad_receiver__user=user).count(),
         })
         return context
+
+
+class CreateExcPropsView(LoginRequiredMixin, CreateView):
+    model = ExchangeProposal
+    template_name = 'ads/create_exc_props.html'
+    form_class = CreateExchangeProposalForm
+
+    def get_success_url(self):
+        return reverse('ads:detail_ad', kwargs={'pk': self.object.ad_receiver.pk})
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ad_receiver'] = Ad.objects.filter(id=self.kwargs.get('pk')).first()
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.ad_receiver = Ad.objects.get(id=self.kwargs.get('pk'))
+        return super().form_valid(form)
+
 
 class DetailExcPropView(DetailView):
     queryset = ExchangeProposal.objects.select_related(
