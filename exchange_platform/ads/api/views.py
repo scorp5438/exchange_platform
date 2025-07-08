@@ -114,12 +114,6 @@ class ExchangeProposalViewSet(ModelViewSet):
             POST /proposals/ - создание нового предложения обмена
             PATCH /proposals/<id>/ - обновление статуса или комментария предложения
             DELETE /proposals/<id>/ - удаление предложения
-
-        Примечания:
-            - Поле ad_sender устанавливается автоматически на основе текущего пользователя
-            - Поле ad_receiver обязательно для указания при создании
-            - Статус по умолчанию 'ожидает'
-            - Только отправитель может изменять или удалять предложение
         """
     queryset = ExchangeProposal.objects.select_related('ad_sender__user', 'ad_receiver__user').all()
     serializer_class = ExchangeProposalSerializer
