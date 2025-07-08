@@ -2,3 +2,5 @@
 
 2 
 ### `pip install -r requirements.txt`
+
+3 Создать и заполнить .env файл по шаблону .env.template
