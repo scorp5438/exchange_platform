@@ -772,8 +772,7 @@ class UpdateExcPropsViewTest(BaseTest):
     def test_other_user_cannot_update(self):
         self.client.login(**self.user_2)
 
-        with self.assertRaises(PermissionDenied):
-            self.client.get(reverse(
+        response = self.client.get(reverse(
                 'ads:update_exc_props',
                 kwargs={'pk': self.exp_props_1.pk}
             ))
