@@ -1,0 +1,101 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+    Регистрация
+{% endblock%}
+
+{% block extra_css %}
+<style>
+    /* Стили формы регистрации */
+    .register-form {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 500px;
+        margin: 130px auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 40px;
+    }
+
+    .register-form p {
+        margin-bottom: 20px;
+    }
+
+    .register-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .register-form input[type="text"],
+    .register-form input[type="password"],
+    .register-form input[type="email"] {
+        width: 95%;
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        font-size: 16px;
+    }
+
+    .register-form input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.3);
+    }
+
+    .register-form .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: #4a6fa5;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .register-form .btn-submit:hover {
+        background: #3a5a8a;
+    }
+
+    /* Стили для ошибок */
+    .register-form .errorlist {
+        color: #e74c3c;
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    /* Стили для подсказок */
+    .register-form .helptext {
+        display: block;
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <h1>Регистрация:</h1>
+    <form class="register-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn-submit" type="submit">Зарегистрироваться</button>
+    </form>
+{% endblock %}

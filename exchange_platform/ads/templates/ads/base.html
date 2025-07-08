@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            min-height: 100vh;
+        }
+        .user_content {
+            display: flex;
+            gap: 25px;
+            justify-content: space-evenly;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user_content .auth {
+            margin: 0;
+        }
+
+        .user_content a {
+            color: #4a6fa5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .user_content a:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+    </style>
+    <title>
+        {% block title %}
+            Base Title
+        {% endblock %}
+    </title>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="user_content">
+        {% if not user.is_authenticated %}
+            <p class="auth">Вы не авторизованы</p>
+        {% else %}
+        <p class="auth">Добро пожаловать, {{ user }}</p>
+        <p class="auth"><a href="{% url 'ads:index' %}">Главная</a></p>
+        <p class="auth"><a href="{% url 'ads:create_ad' %}">Новое объявление</a></p>
+        <p class="auth"><a href="{% url 'ads:exc_props_list' %}">Предложения обмена</a></p>
+        {% endif %}
+
+        {% if user.is_staff %}
+        <p class="auth"><a href="{% url 'admin:index' %}">Админ-панель</a></p>
+        {% endif %}
+
+        {% if not user.is_authenticated %}
+        <p class="auth"><a href="{% url 'accounts:login' %}">Вход</a></p>
+        <p class="auth"><a href="{% url 'accounts:register' %}">Регистрация</a></p>
+        {% else %}
+        <p class="auth"><a href="{% url 'accounts:logout' %}">Выход</a></p>
+        {% endif %}
+    </div>
+
+    {% block body %}
+        <h1>Base body</h1>
+    {% endblock %}
+</body>
+</html>

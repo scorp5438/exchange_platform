@@ -1,0 +1,138 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+    Добавление рецепта
+{% endblock%}
+
+{% block extra_css %}
+<style>
+    /* Основные стили страницы */
+    .edit-exchange-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Заголовок */
+    .edit-exchange-container h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Стили формы */
+    .edit-exchange-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .edit-exchange-form p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .edit-exchange-form label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+
+    .edit-exchange-form input,
+    .edit-exchange-form select,
+    .edit-exchange-form textarea {
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-exchange-form input:focus,
+    .edit-exchange-form select:focus,
+    .edit-exchange-form textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.3);
+    }
+
+    .edit-exchange-form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    /* Кнопки */
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .btn-save {
+        background: #4a6fa5;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #3a5a80;
+        box-shadow: 0 4px 8px rgba(74, 111, 165, 0.3);
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.3);
+        color: #2c3e50;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Сообщения об ошибках */
+    .errorlist {
+        color: #e74c3c;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0.85rem;
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="edit-exchange-container">
+    <form method="post" enctype="multipart/form-data" class="edit-exchange-form">
+        <h1>Редактирование предложения обмена: {{ object.ad_receiver }}</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <a href="{% url 'ads:detail_exc_props' pk=object.pk %}" class="btn btn-back">Назад</a>
+            <button type="submit" class="btn btn-save">Сохранить</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

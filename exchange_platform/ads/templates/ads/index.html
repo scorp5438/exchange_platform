@@ -1,0 +1,275 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+    Барахолка
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+
+    /* Стили формы фильтрации */
+    form {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-evenly;
+        align-items: baseline;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: inline-block;
+        width: 100px;
+        font-weight: 600;
+    }
+
+    input[type="text"], select {
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        width: 200px;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus, select:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.3);
+    }
+
+    button[type="submit"] {
+        background: #4a6fa5;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background: #3a5a8a;
+    }
+
+    a {
+        color: #4a6fa5;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: #2c3e50;
+        text-decoration: underline;
+    }
+
+    /* Стили списка объявлений */
+    .ads-list {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .ads-list h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    ol {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .ads-item {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ads-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .ads-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .ads-item h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+
+    .ads-item h2 a {
+        color: #2c3e50;
+    }
+
+    .ads-item h2 a:hover {
+        color: #4a6fa5;
+    }
+
+    .ads-item ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .ads-item li {
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .ads-item strong {
+        color: #4a6fa5;
+    }
+
+    /* Стили пагинации */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 10px;
+    }
+
+    .pagination a, .pagination span {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .pagination a:hover {
+        background: rgba(74, 111, 165, 0.3);
+    }
+
+    .pagination .current {
+        background: #4a6fa5;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Сообщение об отсутствии объявлений */
+    .ads-list > p {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<!-- Форма фильтрации -->
+    <form method="get">
+         <!-- Поле поиска -->
+        <div>
+            <label for="search" onchange="this.form.submit()">Поиск:</label>
+            <input type="text" name="search" id="search"
+                   value="{{ search_query }}" placeholder="Введите ключевые слова">
+            <button type="submit">Найти</button>
+        </div>
+
+        <!-- Фильтр по категории -->
+        <div>
+            <label for="category">Категория:</label>
+            <select name="category" id="category" onchange="this.form.submit()">
+                <option value="">Все категории</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}"
+                        {% if current_category == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.category_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Фильтр по состоянию -->
+        <div>
+            <label for="condition">Состояние:</label>
+            <select name="condition" id="condition" onchange="this.form.submit()">
+                <option value="">Любое состояние</option>
+                {% for value, name in conditions %}
+                    <option value="{{ value }}"
+                        {% if current_condition == value %}selected{% endif %}>
+                        {{ name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <a href="?">Сбросить фильтры</a>
+    </form>
+
+    <div class="ads-list">
+        <h1>Список объявлений</h1>
+        {% if object_list %}
+            <ol>
+                {% for ads in object_list %}
+                    <div class="ads-item">
+                        <li>
+                            <img src="{{ ads.get_image_url }}" alt="{{ ads.title }}">
+                            <h2><a href="{% url 'ads:detail_ad' pk=ads.pk %}">{{ ads.title }}</a></h2>
+
+                            <ul>
+                                <li><strong>Описание:</strong> {{ ads.get_short_description }}</li>
+                                <li><strong>Автор объявления:</strong> {{ ads.user.username }}</li>
+                                <li><strong>Категория:</strong> {{ ads.category }}</li>
+                                <li><strong>Состояние товара:</strong> {{ ads.condition }}</li>
+                                <li><strong>Дата добавления:</strong> {{ ads.created_at }}</li>
+                            </ul>
+                        </li>
+                    </div>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>Еще нет ни одного объявления...</p>
+        {% endif %}
+
+        <!-- Пагинация -->
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">←</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">→</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+
+</div>
+{% endblock %}

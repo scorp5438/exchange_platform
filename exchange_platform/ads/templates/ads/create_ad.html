@@ -1,0 +1,141 @@
+{% extends 'ads/base.html' %}
+
+{% block title %}
+    Создание объявления
+{% endblock%}
+
+{% block extra_css %}
+<style>
+    /* Стили для формы создания (аналогичны форме редактирования) */
+    .create-form {
+        max-width: 800px;
+        margin: 30px auto;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .create-form h1 {
+        margin-top: 0;
+        color: #2c3e50;
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+
+    .create-form p {
+        margin-bottom: 20px;
+    }
+
+    .create-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .create-form input[type="text"],
+    .create-form input[type="file"],
+    .create-form select,
+    .create-form textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .create-form input[type="text"]:focus,
+    .create-form input[type="file"]:focus,
+    .create-form select:focus,
+    .create-form textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.3);
+    }
+
+    .create-form textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .create-form button[type="submit"] {
+        background: #4a6fa5;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        display: block;
+        margin: 30px auto 0;
+        width: 200px;
+        text-align: center;
+    }
+
+    .create-form button[type="submit"]:hover {
+        background: #3a5a8a;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #2c3e50;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .back-link:hover {
+        background: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+    }
+
+    /* Стили для ошибок */
+    .errorlist {
+        color: #e74c3c;
+        padding-left: 0;
+        list-style: none;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Чекбоксы и радиокнопки */
+    .create-form input[type="checkbox"],
+    .create-form input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    /* Подсказки для полей */
+    .helptext {
+        font-size: 0.8rem;
+        color: #666;
+        display: block;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="create-form">
+    <form method="post" enctype="multipart/form-data">
+        <h1>Создание объявления</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Добавить</button>
+    </form>
+    <a href="{% url 'ads:index' %}" class="back-link">Назад к списку</a>
+</div>
+{% endblock %}

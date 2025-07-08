@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME_DB}
+      POSTGRES_USER: ${POSTGRES_USER_NAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PORT: ${POSTGRES_PORT}
+    volumes:
+      - postgres_data_exp:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: sh -c "gunicorn exchange_platform.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    volumes:
+      - static_volume_exp:/app/static
+      - media:/app/media
+    depends_on:
+      - db
+    environment:
+      - PYTHONPATH=/app
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume_exp:/app/static
+      - media:/media
+    depends_on:
+      - web
+
+volumes:
+  postgres_data_exp:
+  static_volume_exp:
+  media:
