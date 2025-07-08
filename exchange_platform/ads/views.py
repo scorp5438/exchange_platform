@@ -89,9 +89,6 @@ class UpdateAdView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('ads:detail_ad', kwargs={'pk': self.object.pk})
 
     def test_func(self):
-        if self.request.user.is_superuser:
-            return True
-
         created_by_current_user = self.get_object().user == self.request.user
         return created_by_current_user
 

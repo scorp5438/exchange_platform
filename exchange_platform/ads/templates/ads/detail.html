@@ -54,10 +54,14 @@
     <p><strong>Пользователь</strong> : {{ object.user.username }}</p>
 
     <div class="action-links">
-        {% if user.username == object.user.username or user.is_staff %}
+        {% if user.username == object.user.username %}
             <a href="{% url 'ads:update_ad' pk=object.pk %}">Редактировать</a>
+        {% endif %}
+
+         {% if user.username == object.user.username or user.is_staff %}
             <a href="{% url 'ads:delete_ad' pk=object.pk %}">Удалить</a>
         {% endif %}
+
 
         {% if user.username != object.user.username %}
             <a href="{% url 'ads:exc_props' pk=object.pk %}">Обмен</a>

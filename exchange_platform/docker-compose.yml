@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:17
@@ -12,13 +10,11 @@ services:
       - postgres_data_exp:/var/lib/postgresql/data
 
   web:
-    build: ./exchange_platform
+    build: .
     command: sh -c "gunicorn exchange_platform.wsgi:application --bind 0.0.0.0:8000 --workers 3"
-    ports:
-      - '8000:8000'
     volumes:
       - static_volume_exp:/app/static
-      - media:/app/media:ro,uid=101,gid=101
+      - media:/app/media
     depends_on:
       - db
     environment:
@@ -30,7 +26,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./exchange_platform/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
       - static_volume_exp:/app/static
       - media:/media
     depends_on:
