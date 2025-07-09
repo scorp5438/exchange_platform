@@ -11,10 +11,10 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('ads:index')
 
     def form_valid(self, form):
+        response = super().form_valid(form)  # Сначала сохраняем форму
         user = form.save()
-        login(self.request, user)
-        return super().form_valid(form)
-
+        login(self.request, user)  # Затем логиним
+        return response
 
 class MyLogoutView(LogoutView):
     next_page = reverse_lazy('ads:index')
