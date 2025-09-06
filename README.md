@@ -53,10 +53,6 @@
 [![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
 [![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white)](https://gunicorn.org/)
 
-### 🔧 CI/CD
-- **Автоматизация**: GitHub Actions  
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions)
-
 ---
 
 **Полный стек:** Django • Django REST Framework • Django Templates • Jinja2 • PostgreSQL • Docker • Docker Compose • Nginx • Gunicorn • Celery • Redis • GitHub Actions
